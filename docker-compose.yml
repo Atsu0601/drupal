@@ -3,13 +3,15 @@ version: '3.7'
 services:
   mysql:
     image: mariadb
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    command: --character-set-server=utf8 --collation-server=utf8_unicode_ci
     volumes:
       - data:/var/lib/mysql
       - ./dump:/docker-entrypoint-initdb.d
     environment:
       MYSQL_ROOT_PASSWORD: "password" # 任意で変更してください
       MYSQL_DATABASE: "drupal" # 任意で変更してください
+      MYSQL_USER: "username" # 新たに追加したユーザ名
+      MYSQL_PASSWORD: "userpassword" # 新たに追加したユーザのパスワード
     ports:
       - "3306:3306"
 
@@ -31,8 +33,10 @@ services:
     image: phpmyadmin/phpmyadmin
     restart: always
     ports:
-      - "8080:80"
+      - "8180:80"
     environment:
+      PMA_USER: username
+      PMA_PASSWORD: userpassword
       PMA_HOST: mysql
       MYSQL_ROOT_PASSWORD: "password" # MySQLのパスワードと同じにしてください
 
